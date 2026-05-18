@@ -252,20 +252,15 @@ Be concise, professional, and friendly. Ask only ONE question."""
             for a in recommendations[:10]
         )
         action = "updated" if is_refinement else "selected"
+        prompt = f"""You are an SHL assessment recommendation agent.
 
-        prompt = f"""You are an SHL assessment recommendation agent chatbot.
-
-You have {action} these assessments for a {context.role_type or 'role'} 
-{('at ' + context.seniority_level + ' level') if context.seniority_level else ''}:
+You have {action} these assessments for a {context.role_type or 'role'}{(' at ' + context.seniority_level + ' level') if context.seniority_level else ''}:
 
 {assessment_list}
 
-Write a SHORT, conversational reply (2-3 sentences MAX) introducing these recommendations.
-- Be direct and professional, NOT formal or email-like
-- Do NOT start with "Dear" or use email conventions
-- Mention why they fit the role in one sentence
-- End by asking if they'd like changes or comparisons
-Example style: "Here are 8 assessments suited for a mid-level Java developer focusing on stakeholder work. They cover both technical Java knowledge and behavioral competencies. Let me know if you'd like to adjust or compare any of them." """
+Write a short, professional reply of 2-3 sentences introducing these recommendations.
+Do not use bullet points. Do not add any meta-commentary. Output only the reply text itself.
+Mention why they suit the role, then ask if the user wants refinements or comparisons."""
 
         try:
             return self._call_llm(prompt)
